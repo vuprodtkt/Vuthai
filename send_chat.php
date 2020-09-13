@@ -207,7 +207,7 @@ echo'{
           "elements":[
             {
               "title":"Đang thả câu...",
-              "subtitle":"Chưa có cá nào dính thính đâu. Hãy chờ tiếp bạn nhé!"
+              "subtitle":"Chưa có ai tham gia đâu. Hãy chờ tiếp bạn nhé!"
             }
           ]
         }
