@@ -57,7 +57,7 @@ else
           "elements":[
             {
               "title":"Cảnh báo",
-              "subtitle":"Cá đã gửi nội dung nhạy cảm",
+              "subtitle":"Người lạ đã gửi nội dung nhạy cảm",
               "buttons":[
                 {
                   "type":"web_url",
