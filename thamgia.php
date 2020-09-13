@@ -80,63 +80,15 @@ function addketnoi($user1, $user2) {
 function ketnoi($userid,$gioitinh) { //tìm người chát 
   global $conn;
   
-  //tìm đối tượng theo giới tính 
+  $result = mysqli_query($conn, "SELECT `ID` FROM `users` WHERE `ID` != $userid AND `hangcho` = 1 AND `ID` NOT IN (SELECT `idBlocked` FROM `block` WHERE `idBlock` = $userid) LIMIT 1");
 
-  if($gioitinh == "female"){// nếu giới tính là nữ thì kiếm người mang giới tính nam 
-  $result = mysqli_query($conn, "SELECT `ID` FROM `users` WHERE `ID` != $userid AND `hangcho` = 1 AND `gioitinh` = 1 AND `ID` NOT IN (SELECT `idBlocked` FROM `block` WHERE `idBlock` = $userid) LIMIT 1");
-  //echo "result : " . $result."<br>";
-  }else if($gioitinh == "male"){// giới tính là nam thì tìm kiếm người là nữ
-  $result = mysqli_query($conn, "SELECT `ID` FROM `users` WHERE `ID` != $userid AND `hangcho` = 1 AND `gioitinh` = 2 AND `ID` NOT IN (SELECT `idBlocked` FROM `block` WHERE `idBlock` = $userid) LIMIT 1");
-  }else{ // không xác thì tìm kiếm người không xác định
-  $result = mysqli_query($conn, "SELECT `ID` FROM `users` WHERE `ID` != $userid AND `hangcho` = 1 AND `gioitinh` = 0 AND `ID` NOT IN (SELECT `idBlocked` FROM `block` WHERE `idBlock` = $userid) LIMIT 1");
-  }
-  //echo $result;
+
   $row = mysqli_fetch_assoc($result);
   $partner = $row['ID'];
   // xử lý kiểm tra
   if ($partner == 0) { // nếu người không có ai trong hàng chờ
   mysqli_query($conn, "UPDATE `users` SET `hangcho` = 1 WHERE `ID` = $userid"); 
-    if($gioitinh == 'male'){
-     echo'{
-     "messages": [
-    {
-      "attachment":{
-        "type":"template",
-        "payload":{
-          "template_type":"generic",
-          "elements":[
-            {
-              "title":"Đang tìm người...",
-              "subtitle":"Đợi xíu BOT đang tìm một bạn nữ cho bạn (👩)"
-            }
-          ]
-        }
-      }
-    }
-  ]
-} ';
-	   
-}else if($gioitinh == 'female'){
- echo'{
- "messages": [
-    {
-      "attachment":{
-        "type":"template",
-        "payload":{
-          "template_type":"generic",
-          "elements":[
-            {
-              "title":"Đang tìm người...",
-              "subtitle":"Đợi xíu BOT đang tìm một bạn nam cho bạn (👱)"
-            }
-          ]
-        }
-      }
-    }
-  ]
-}  ';
-
-}else{
+    
   echo'{
  "messages": [
     {
@@ -146,28 +98,20 @@ function ketnoi($userid,$gioitinh) { //tìm người chát
           "template_type":"generic",
           "elements":[
             {
-              "title":"Đang tìm người...",
-              "subtitle":"Đợi xíu BOT đang tìm một bạn ẩn giới tính giống bạn (👤)"
+              "title":"🎉 THÔNG BÁO",
+              "subtitle":"Đợi xíu BOT đang tìm một bạn ẩn danh (👤)"
             }
           ]
         }
       }
     }
   ]
-}';	
-}
+}'; 
 } else {  // neu co nguoi trong hàng chờ
     addketnoi($userid, $partner);
-	if($gioitinh == "male"){
-	sendchat($userid,"✅ Bạn đã được kết nối với một cá nữ (👩)");  
-	sendchat($partner,"✅ Bạn đã được kết nối với một cá nam (👱)");  
-	}else if($gioitinh == "female"){
-	sendchat($partner,"✅ Bạn đã được kết nối với một cá nữ (👩)");  
-	sendchat($userid,"✅ Bạn đã được kết nối với một cá nam (👱)"); 	
-	}else{
-	sendchat($partner,"✅ Bạn đã được kết nối với một cá lạ(👤)");  
-	sendchat($userid,"✅ Bạn đã được kết nối với một cá lạ(👤)"); 	
-	}
+ 
+ sendchat($partner,"✅ Bạn đã được kết nối với một người lạ(👤)");  
+ sendchat($userid,"✅ Bạn đã được kết nối với một người lạ(👤)");  
   
   }
 }
@@ -228,7 +172,7 @@ echo'{
           "elements":[
             {
               "title":"Cảnh báo",
-              "subtitle":"Bạn đang được kết nối với người lạ rồi! Hãy gõ \'End\' để thoát"
+              "subtitle":"Bạn đang được kết nối với người lạ rồi! Hãy gõ \'Ketthuc\' để thoát"
             }
           ]
         }
